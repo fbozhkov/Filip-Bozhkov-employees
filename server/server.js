@@ -2,8 +2,7 @@ import express, { json } from "express";
 import cors from "cors";
 import multer from "multer";
 import { readFileSync, unlinkSync } from "fs";
-import path from "path";
-import { processCsv } from "./processCsv";
+import { processCsv } from "./processCsv.js";
 
 const upload = multer({ dest: "uploads/" });
 const app = express();
@@ -15,8 +14,9 @@ app.use(json());
 app.post("/upload", upload.single("file"), (req, res) => {
     const data = readFileSync(req.file.path, "utf8");
     unlinkSync(req.file.path);
-
+    
     const result = processCsv(data);
+    
     res.json(result);
 });
 
